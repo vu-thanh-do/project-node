@@ -13,6 +13,7 @@ import Chat from "./ChatModel";
 import Voucher from "./VoucherModel";
 import FeebackModel from "./FeebackModel";
 import OrderModel from "./OrderModel";
+import transaction from "./transaction";
 const crypto = require("crypto");
 const querystring = require("qs");
 const moment = require("moment");
@@ -226,13 +227,25 @@ app.post("/create-checkout-vnpay", async (req: any, res: any) => {
     const signed = hmac.update(signData).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-
+    await transaction.create({
+      amount: amount,
+      date: new Date(),
+    });
     res.send({ url: vnpUrl });
   } catch (error) {
     return res.status(500, { message: "Error server" });
   }
 });
 // Lấy thông tin sản phẩm
+
+app.get("/transactions", async (req, res) => {
+  try {
+    const data = await transaction.find({});
+    return res.json(data);
+  } catch (error: any) {
+    return res.json({ message: error.message });
+  }
+});
 app.get("/product", async (req: Request, res: Response) => {
   try {
     const products = await Product.find();

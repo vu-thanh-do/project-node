@@ -22,6 +22,7 @@ import AddVoucher from "./components/voucher/addVoucher";
 import FeedbackApp from "./components/feedback/FeedBack";
 import { FeedbackKH } from "./components/feedback/FeedbackKH";
 import FeedbackMenu from "./components/feedback/FeedBack";
+import Transaction from "./components/admin/Transaction";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
         <Route path="/admin" element={<Privaterouter><Admin /></Privaterouter>}>
           {/* Dashboard */}
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="transaction" element={<Transaction/>} />
+
 
           {/* Chi tiết sản phẩm */}
           <Route path="dashboard/product/details/:id" element={<ProductDetails />} />
