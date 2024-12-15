@@ -12,6 +12,7 @@ const Transaction: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [amount, setAmount] = useState<any>(0);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -33,10 +34,19 @@ const Transaction: React.FC = () => {
       (!endDate || transactionDate <= endDate)
     );
   });
-
+ const totalAmount = filteredTransactions.reduce((sum, transaction) => {
+    return sum + Number(transaction.amount);
+  }, 0);
   return (
     <div style={styles.container}>
       <div style={styles.dateContainer}>
+        <div style={{ marginTop: "20px", fontWeight: "bold", fontSize: "16px" }}>
+          Tổng tiền:{" "}
+          {totalAmount.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </div>
         <label style={styles.label}>
           Ngày bắt đầu:
           <input
@@ -69,7 +79,14 @@ const Transaction: React.FC = () => {
                   <strong>Số tiền nhận:</strong> {Number(transaction?.amount).toLocaleString()} VND
                 </div>
                 <div>
-                  <strong>Ngày nhận:</strong> {transaction.date.split("T")[0]}
+                  <strong>Ngày nhận:</strong> {new Date(transaction.date).toLocaleString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })}
                 </div>
               </li>
             ))
